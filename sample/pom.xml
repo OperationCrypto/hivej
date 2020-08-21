@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>hivej-sample</artifactId>
+
+	<name>HiveJ-Sample</name>
+	<description>An example application for HiveJ.</description>
+	<url>http://www.hiveit.com/@dez1337</url>
+
+	<parent>
+		<groupId>eu.bittrade.libs</groupId>
+		<artifactId>hivej-parent</artifactId>
+		<version>0.22.1-1-SNAPSHOT</version>
+	</parent>
+
+	<licenses>
+		<license>
+			<name>GNU General Public License, Version 3</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>dez1337</name>
+			<email>dez1337@bittrade.eu</email>
+			<organization>bittrade.eu</organization>
+			<organizationUrl>http://www.bittrade.eu</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/marvin-we/hive-java-api-wrapper.git</connection>
+		<developerConnection>scm:git:ssh://github.com/marvin-we/hive-java-api-wrapper.git</developerConnection>
+		<url>https://github.com/marvin-we/hive-java-api-wrapper/tree/master</url>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/marvin-we/hive-java-api-wrapper/issues</url>
+	</issueManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>eu.bittrade.libs</groupId>
+			<artifactId>hivej-core</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<log4j.version>2.13.3</log4j.version>
+	</properties>
+</project>
