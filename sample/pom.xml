@@ -9,7 +9,7 @@
 	<url>http://www.hiveit.com/@dez1337</url>
 
 	<parent>
-		<groupId>eu.bittrade.libs</groupId>
+		<groupId>org.operationcrypto</groupId>
 		<artifactId>hivej-parent</artifactId>
 		<version>0.22.1-1-SNAPSHOT</version>
 	</parent>
@@ -31,19 +31,19 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/marvin-we/hive-java-api-wrapper.git</connection>
-		<developerConnection>scm:git:ssh://github.com/marvin-we/hive-java-api-wrapper.git</developerConnection>
+		<connection>scm:git:git://github.com/OperationCrypto/hivej.git</connection>
+		<developerConnection>scm:git:ssh://github.com/OperationCrypto/hivej.git</developerConnection>
 		<url>https://github.com/marvin-we/hive-java-api-wrapper/tree/master</url>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/marvin-we/hive-java-api-wrapper/issues</url>
+		<url>https://github.com/OperationCrypto/hivej/issues</url>
 	</issueManagement>
 
 	<dependencies>
 		<dependency>
-			<groupId>eu.bittrade.libs</groupId>
+			<groupId>org.operationcrypto</groupId>
 			<artifactId>hivej-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

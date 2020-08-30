@@ -20,5 +20,13 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Setup Maven
+        uses: stCarolas/setup-maven@v1
+        with:
+          maven-version: 3.6.3
       - name: Build with Maven
-        run: mvn -B install --file pom.xml
+        run: mvn -B --file pom.xml clean install
+      - name: SonarSource Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B --file pom.xml sonar:sonar

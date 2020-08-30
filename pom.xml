@@ -1,9 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>eu.bittrade.libs</groupId>
+	<groupId>org.operationcrypto</groupId>
 	<artifactId>hivej-parent</artifactId>
 	<version>0.22.1-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -18,7 +16,7 @@
 	</modules>
 
 	<prerequisites>
-		<maven>3.3.9</maven>
+		<maven>3.6.3</maven>
 	</prerequisites>
 
 	<distributionManagement>
@@ -49,14 +47,14 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/marvin-we/hive-java-api-wrapper.git</connection>
-		<developerConnection>scm:git:ssh://github.com/marvin-we/hive-java-api-wrapper.git</developerConnection>
-		<url>https://github.com/marvin-we/hive-java-api-wrapper/tree/master</url>
+		<connection>scm:git:git://github.com/OperationCrypto/hivej</connection>
+		<developerConnection>scm:git:ssh://github.com/OperationCrypto/hivej.git</developerConnection>
+		<url>https://github.com/OperationCrypto/hivej</url>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/marvin-we/hive-java-api-wrapper/issues</url>
+		<url>https://github.com/OperationCrypto/hivej/issues</url>
 	</issueManagement>
 
 	<profiles>
@@ -70,7 +68,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
-						<version>3.0.1</version>
+						<version>3.2.1</version>
 						<executions>
 							<execution>
 								<id>attach-sources</id>
@@ -83,7 +81,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>3.0.0-M1</version>
+						<version>3.2.0</version>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
@@ -118,7 +116,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.3.0</version>
 					<configuration>
 						<archive>
 							<manifest>
@@ -145,12 +143,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>2.20.1</version>
+					<version>2.22.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.20.1</version>
+					<version>2.22.2</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -158,7 +156,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.8.1</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
@@ -167,12 +165,12 @@
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.4.0.905</version>
+				<version>3.7.0.1746</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.9</version>
+				<version>0.8.5</version>
 				<executions>
 					<execution>
 						<id>pre-unit-test</id>
@@ -224,7 +222,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>org.operationcrypto.hivej</sonar.projectKey>
+		<sonar.organization>operationcrypto</sonar.organization>
+		<sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
 		<java.version>1.8</java.version>
 	</properties>
 </project>
