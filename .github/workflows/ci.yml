@@ -28,5 +28,5 @@ jobs:
         run: mvn -B --file pom.xml clean install
       - name: SonarSource Analysis
         env:
-          SC_TOKEN: ${{ secrets.SonarCloudToken }}
-        run: mvn -B --file pom.xml sonar:sonar -Dsonar.login="%SC_TOKEN%"
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B --file pom.xml sonar:sonar
