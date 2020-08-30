@@ -16,7 +16,7 @@
 	</modules>
 
 	<prerequisites>
-		<maven>3.3.9</maven>
+		<maven>3.6.3</maven>
 	</prerequisites>
 
 	<distributionManagement>
@@ -47,14 +47,14 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/marvin-we/hive-java-api-wrapper.git</connection>
-		<developerConnection>scm:git:ssh://github.com/marvin-we/hive-java-api-wrapper.git</developerConnection>
-		<url>https://github.com/marvin-we/hive-java-api-wrapper/tree/master</url>
+		<connection>scm:git:git://github.com/OperationCrypto/hivej</connection>
+		<developerConnection>scm:git:ssh://github.com/OperationCrypto/hivej.git</developerConnection>
+		<url>https://github.com/OperationCrypto/hivej</url>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/marvin-we/hive-java-api-wrapper/issues</url>
+		<url>https://github.com/OperationCrypto/hivej/issues</url>
 	</issueManagement>
 
 	<profiles>
