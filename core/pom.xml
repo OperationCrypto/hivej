@@ -9,7 +9,7 @@
 	<url>http://www.hiveit.com/@dez1337</url>
 
 	<parent>
-		<groupId>eu.bittrade.libs</groupId>
+		<groupId>org.operationcrypto</groupId>
 		<artifactId>hivej-parent</artifactId>
 		<version>0.22.1-1-SNAPSHOT</version>
 	</parent>

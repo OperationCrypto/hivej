@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>eu.bittrade.libs</groupId>
+	<groupId>org.operationcrypto</groupId>
 	<artifactId>hivej-parent</artifactId>
 	<version>0.22.1-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -224,7 +224,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<java.version>1.8</java.version>
 	</properties>
 </project>
