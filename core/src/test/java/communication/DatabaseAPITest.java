@@ -25,6 +25,7 @@ import org.operationcrypto.hivej.api.database.model.FindVotesReturn;
 import org.operationcrypto.hivej.api.database.model.Fund;
 import org.operationcrypto.hivej.api.database.model.GetRewardFundsReturn;
 import org.operationcrypto.hivej.api.database.model.RewardBalance;
+import org.operationcrypto.hivej.api.database.model.Vote;
 import org.operationcrypto.hivej.communication.CommunicationHandler;
 import org.operationcrypto.hivej.enums.HiveApiType;
 import org.operationcrypto.hivej.enums.RequestMethod;
@@ -47,8 +48,15 @@ public class DatabaseAPITest {
 		CommunicationHandler communicationHandler = new CommunicationHandler();
 		FindVotesReturn result = communicationHandler.performRequest(request, FindVotesReturn.class).get(0);
 		
-		assertEquals(permlink, result.getVotes().get(0).getPermlink());
-		assertEquals(author, result.getVotes().get(0).getAuthor());
+		Vote vote = result.getVotes().get(0);
+		assertEquals(permlink, vote.getPermlink());
+		assertEquals(author, vote.getAuthor());
+		assertEquals("sergey44", vote.getVoter());
+		assertEquals(14701, vote.getWeight());
+		assertEquals("9818914530", vote.getRShares());
+		assertEquals(10000, vote.getPercent());
+		assertEquals(0, vote.getNumChanges());
+		assertEquals("2018-01-14T15:50:09", vote.getLastUpdate());
 	}
 	
 	/**
