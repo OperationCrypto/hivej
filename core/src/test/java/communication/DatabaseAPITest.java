@@ -17,10 +17,12 @@
 package communication;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.operationcrypto.hivej.api.database.model.FindVotesArgs;
 import org.operationcrypto.hivej.api.database.model.FindVotesReturn;
+import org.operationcrypto.hivej.api.database.model.GetRewardFundsReturn;
 import org.operationcrypto.hivej.communication.CommunicationHandler;
 import org.operationcrypto.hivej.enums.HiveApiType;
 import org.operationcrypto.hivej.enums.RequestMethod;
@@ -40,6 +42,18 @@ public class DatabaseAPITest {
 		
 		assertEquals(permlink, result.getVotes().get(0).getPermlink());
 		assertEquals(author, result.getVotes().get(0).getAuthor());
+	}
+	
+	@Test
+	public void testGetRewardFunds() throws Throwable {
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.GET_REWARD_FUNDS,
+				null);
+
+		CommunicationHandler communicationHandler = new CommunicationHandler();
+		GetRewardFundsReturn result = communicationHandler.performRequest(request, GetRewardFundsReturn.class).get(0);
+
+		assertNotNull(result);
+		assertNotNull(result.getFunds().get(0));
 	}
 }
  
