@@ -28,6 +28,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GetRewardFundsReturn {
 	@JsonProperty("funds")
 	private List<Fund> mFunds;
+	
+	public GetRewardFundsReturn() {
+		// Default Constructor 
+	}
 
 	public List<Fund> getFunds() {
 		return mFunds;

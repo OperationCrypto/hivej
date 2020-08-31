@@ -45,7 +45,9 @@ public class Fund {
 	@JsonProperty("curation_reward_curve")
 	private String mCurationRewardCurve;
 	
-	public Fund() {}
+	public Fund() {
+		// Default Constructor 
+	}
 
 	public String getId() {
 		return mId;

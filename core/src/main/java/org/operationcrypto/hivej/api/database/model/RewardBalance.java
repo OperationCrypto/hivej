@@ -32,7 +32,7 @@ public class RewardBalance {
 	private String mNai;
 	
 	public RewardBalance() {
-		
+		// Default Constructor 
 	}
 
 	public String getAmount() {
