@@ -4,6 +4,9 @@
 
 This project allows you to easily interact with the Hive blockchain. The project is based on the [SteemJ](https://github.com/marvin-we/steem-java-api-wrapper) initialized by <a href="https://steemit.com/@dez1337">dez1337 on steemit.com</a> in 2017, but the chance of the hive fork was used to refactor the code base and update the library to become fully functional again.
 
+# Compatibility with Steem
+The main focus of the project is - as the name suggests - the Hive blockchain. As the code base is pretty similar at the time this documenent is written, there is a high chance the library will also work for Steem.
+
 # How to integrate HiveJ in your Java application
 
 ## Gradle
