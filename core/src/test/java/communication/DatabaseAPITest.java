@@ -70,10 +70,10 @@ public class DatabaseAPITest {
 		RewardBalance rewardBalance = fund.getRewardBalance();
 		assertNotNull(rewardBalance.getAmount());
 		assertNotNull(rewardBalance.getNai());
-		assertNotNull(rewardBalance.getPrecision());
+		assertNotNull(Integer.valueOf(rewardBalance.getPrecision()));
 		assertNotNull(fund.getAuthorRewardCurve());
-		assertNotNull(fund.getPercentContentRewards());
-		assertNotNull(fund.getPercentCurationRewards());
+		assertNotNull(Integer.valueOf(fund.getPercentContentRewards()));
+		assertNotNull(Integer.valueOf(fund.getPercentCurationRewards()));
 		assertNotNull(fund.getRecentClaims());
 		assertNotNull(fund.getLastUpdate());
 		assertNotNull(fund.getContentConstant());
