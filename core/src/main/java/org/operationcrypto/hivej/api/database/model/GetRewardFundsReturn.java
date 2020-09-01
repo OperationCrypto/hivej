@@ -20,19 +20,24 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FindVotesReturn {
-	@JsonProperty("votes")
-	private List<Vote> mVotes;
-
-	public List<Vote> getVotes() {
-		return mVotes;
+/**
+ * This class implements the Hive "get_reward_funds_return" object.
+ * 
+ * @author <a href="https://github.com/Jodo1985">jodo1985</a>  
+ */
+public class GetRewardFundsReturn {
+	@JsonProperty("funds")
+	private List<Fund> mFunds;
+	
+	private GetRewardFundsReturn() {
+		// Default Constructor 
 	}
 
-	public void setVotes(List<Vote> votes) {
-		this.mVotes = votes;
+	public List<Fund> getFunds() {
+		return mFunds;
 	}
 
-	private FindVotesReturn() {
-		super();
+	public void setFunds(List<Fund> funds) {
+		this.mFunds = funds;
 	}
 }

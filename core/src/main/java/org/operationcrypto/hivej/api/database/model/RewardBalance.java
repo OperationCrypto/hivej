@@ -16,23 +16,47 @@
  */
 package org.operationcrypto.hivej.api.database.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FindVotesReturn {
-	@JsonProperty("votes")
-	private List<Vote> mVotes;
-
-	public List<Vote> getVotes() {
-		return mVotes;
+/**
+ * This class implements the Hive "?" object.
+ * 
+ * @author <a href="https://github.com/Jodo1985">jodo1985</a>  
+ */
+public class RewardBalance {
+	@JsonProperty("amount")
+	private String mAmount;
+	@JsonProperty("precision")
+	private int mPrecision;
+	@JsonProperty("nai")
+	private String mNai;
+	
+	public RewardBalance() {
+		// Default Constructor 
 	}
 
-	public void setVotes(List<Vote> votes) {
-		this.mVotes = votes;
+	public String getAmount() {
+		return mAmount;
 	}
 
-	private FindVotesReturn() {
-		super();
+	public void setAmount(String amount) {
+		this.mAmount = amount;
 	}
+
+	public int getPrecision() {
+		return mPrecision;
+	}
+
+	public void setPrecision(int precision) {
+		this.mPrecision = precision;
+	}
+
+	public String getNai() {
+		return mNai;
+	}
+
+	public void setNai(String nai) {
+		this.mNai = nai;
+	}
+    
 }

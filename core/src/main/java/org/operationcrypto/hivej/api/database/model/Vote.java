@@ -58,7 +58,7 @@ public class Vote {
 		return mAuthor;
 	}
 
-	public void setmuthor(String mAuthor) {
+	public void setAuthor(String mAuthor) {
 		this.mAuthor = mAuthor;
 	}
 
