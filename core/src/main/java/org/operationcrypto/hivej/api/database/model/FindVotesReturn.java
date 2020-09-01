@@ -32,7 +32,7 @@ public class FindVotesReturn {
 		this.mVotes = votes;
 	}
 
-	public FindVotesReturn() {
+	private FindVotesReturn() {
 		super();
 	}
 }

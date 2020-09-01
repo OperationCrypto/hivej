@@ -29,7 +29,7 @@ public class GetRewardFundsReturn {
 	@JsonProperty("funds")
 	private List<Fund> mFunds;
 	
-	public GetRewardFundsReturn() {
+	private GetRewardFundsReturn() {
 		// Default Constructor 
 	}
 
