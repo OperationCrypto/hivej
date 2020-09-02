@@ -27,7 +27,7 @@ import org.operationcrypto.hivej.jrpc.JsonRPCResponse;
  * 
  * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
-public abstract class AbstractClient {
+public interface AbstractClient {
     /**
      * Use this method to send a <code>requestObject</code> to the
      * <code>endpointUri</code> and to receive an answer.

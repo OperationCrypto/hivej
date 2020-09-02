@@ -55,6 +55,6 @@ public class HiveJConfig {
 	}
 	
     public Pair<URI, Boolean> getNextEndpointURI(int selector) throws URISyntaxException {
-    	return new ImmutablePair<URI, Boolean>(new URI(DEFAULT_HIVE_API_URI), true);
+    	return new ImmutablePair<>(new URI(DEFAULT_HIVE_API_URI), true);
     }
 }

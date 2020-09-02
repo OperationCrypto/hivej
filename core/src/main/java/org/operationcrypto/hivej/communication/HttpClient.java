@@ -37,7 +37,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
  * 
  * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
-public class HttpClient extends AbstractClient {
+public class HttpClient implements AbstractClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpClient.class);
 
     @Override
