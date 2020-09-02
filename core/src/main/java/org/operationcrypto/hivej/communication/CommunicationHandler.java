@@ -133,8 +133,15 @@ public class CommunicationHandler {
         if (mapper == null) {
             mapper = new ObjectMapper();
 
+            // There are cases in which the response only contains a single value, which is
+            // still returned as an array (e.g. '["result1"]' instead of a real array such
+            // as '["result1","result2"]') - The following command configures
+            // jackson to accept even those cases.
             mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 
+            // Hive nodes require to boolean values to be send in their String
+            // representation - Therefore, tell jackson to use the custom seralizer for
+            // those classes.
             SimpleModule simpleModule = new SimpleModule("BooleanAsString", new Version(1, 0, 0, null, null, null));
             simpleModule.addSerializer(Boolean.class, new BooleanSerializer());
             simpleModule.addSerializer(boolean.class, new BooleanSerializer());
