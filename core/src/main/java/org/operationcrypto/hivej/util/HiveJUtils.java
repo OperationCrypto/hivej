@@ -20,26 +20,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.security.InvalidParameterException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
-
-import javax.annotation.Nullable;
 
 import org.operationcrypto.hivej.config.HiveJConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import eu.bittrade.crypto.core.ECKey;
 import eu.bittrade.crypto.core.VarInt;
 
 /**
@@ -64,8 +52,7 @@ public class HiveJUtils {
      * <li>2. The account name.</li>
      * </ul>
      *
-     * @param string
-     *            The string to transform.
+     * @param string The string to transform.
      * @return The VarInt-byte representation of the given String.
      */
     public static byte[] transformStringToVarIntByteArray(String string) {
@@ -89,8 +76,7 @@ public class HiveJUtils {
     /**
      * Transform a long value into its byte representation.
      * 
-     * @param longValue
-     *            value The long value to transform.
+     * @param longValue value The long value to transform.
      * @return The byte representation of the given value.
      */
     public static byte[] transformLongToVarIntByteArray(long longValue) {
@@ -114,7 +100,7 @@ public class HiveJUtils {
             return (new VarInt(longValue)).encode();
         }
     }
-    
+
     /**
      * 
      * @param collectionToSet
