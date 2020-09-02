@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.operationcrypto.hivej.config.HiveJConfig;
 import org.operationcrypto.hivej.jrpc.JsonRPCRequest;
 import org.operationcrypto.hivej.jrpc.JsonRPCResponse;
+import org.operationcrypto.hivej.base.serializer.BooleanSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,6 +136,8 @@ public class CommunicationHandler {
             mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 
             SimpleModule simpleModule = new SimpleModule("BooleanAsString", new Version(1, 0, 0, null, null, null));
+            simpleModule.addSerializer(Boolean.class, new BooleanSerializer());
+            simpleModule.addSerializer(boolean.class, new BooleanSerializer());
 
             mapper.registerModule(simpleModule);
         }
