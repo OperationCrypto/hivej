@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * This class contains a Json RPC response and offers additional utility
  * methods.
  * 
- * @author 
+ * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
 public class JsonRPCResponse {
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonRPCResponse.class);

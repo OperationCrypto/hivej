@@ -24,7 +24,7 @@ import com.google.api.client.http.HttpRequestInitializer;
 /**
  * This class is used to initialize a http request.
  * 
- * @author
+ * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
 public class HttpClientRequestInitializer implements HttpRequestInitializer {
 

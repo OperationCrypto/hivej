@@ -34,7 +34,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 /**
  * A wrapper object that carries all required fields for a request.
  * 
- * @author 
+ * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
 @JsonPropertyOrder({ "jsonrpc", "method", "params", "id" })
 public class JsonRPCRequest {
