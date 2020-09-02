@@ -67,6 +67,7 @@ public class HiveJConfig {
 		super();
 
 		this.setResponseTimeout(1000);
+		this.setConnectionTimeout(2000);
 		this.setIdleTimeout(60000);
 	}
 
