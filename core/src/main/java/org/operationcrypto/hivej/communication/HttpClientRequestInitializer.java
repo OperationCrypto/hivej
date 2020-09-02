@@ -21,6 +21,8 @@ import java.io.IOException;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 
+import org.operationcrypto.hivej.config.HiveJConfig;
+
 /**
  * This class is used to initialize a http request.
  * 
@@ -30,8 +32,8 @@ public class HttpClientRequestInitializer implements HttpRequestInitializer {
 
     @Override
     public void initialize(HttpRequest request) throws IOException {
-        request.setConnectTimeout(1000);
-        request.setReadTimeout(1000);
+        request.setConnectTimeout(HiveJConfig.getInstance().getConnectionTimeout());
+        request.setReadTimeout(HiveJConfig.getInstance().getResponseTimeout());
         request.setNumberOfRetries(0);
     }
 }
