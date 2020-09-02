@@ -16,19 +16,19 @@
  */
 package org.operationcrypto.hivej.jrpc;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.operationcrypto.hivej.communication.CommunicationHandler;
-import org.operationcrypto.hivej.enums.RequestMethod;
-import org.operationcrypto.hivej.enums.HiveApiType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.operationcrypto.hivej.communication.CommunicationHandler;
+import org.operationcrypto.hivej.enums.HiveApiType;
+import org.operationcrypto.hivej.enums.RequestMethod;
 
 
 /**
@@ -39,7 +39,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 @JsonPropertyOrder({ "jsonrpc", "method", "params", "id" })
 public class JsonRPCRequest {
     /** A shared <code>Random</code> instance. */
-    private static final Random randomGenerator = new Random();
+    private static final SecureRandom randomGenerator = new SecureRandom();
     /** The JSON RPC version. */
     private static final String JSONRPC = "2.0";
     /** The ID of this request. */
