@@ -274,5 +274,7 @@ public enum RequestMethod {
     /** */
     GET_REVERSE_RATIO,
     
-    GET_LIQUIDITY_QUEUE
+    GET_LIQUIDITY_QUEUE,
+    
+    GET_VERSION
 }
