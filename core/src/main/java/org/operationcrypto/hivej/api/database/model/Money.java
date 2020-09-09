@@ -16,15 +16,43 @@
  */
 package org.operationcrypto.hivej.api.database.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "amount",
-    "precision",
-    "nai"
-})
-public class ReceivedVestingShares extends Money {
+public class Money {
+	@JsonProperty("amount")
+	private String amount;
+	@JsonProperty("precision")
+	private Integer precision;
+	@JsonProperty("nai")
+	private String nai;
 
+	@JsonProperty("amount")
+	public String getAmount() {
+		return amount;
+	}
+
+	@JsonProperty("amount")
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+
+	@JsonProperty("precision")
+	public Integer getPrecision() {
+		return precision;
+	}
+
+	@JsonProperty("precision")
+	public void setPrecision(Integer precision) {
+		this.precision = precision;
+	}
+
+	@JsonProperty("nai")
+	public String getNai() {
+		return nai;
+	}
+
+	@JsonProperty("nai")
+	public void setNai(String nai) {
+		this.nai = nai;
+	}
 }
