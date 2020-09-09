@@ -21,8 +21,6 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.security.InvalidParameterException;
-import java.util.List;
 
 import org.operationcrypto.hivej.config.HiveJConfig;
 import org.slf4j.Logger;
@@ -52,8 +50,7 @@ public class HiveJUtils {
      * <li>2. The account name.</li>
      * </ul>
      *
-     * @param string
-     *            The string to transform.
+     * @param string The string to transform.
      * @return The VarInt-byte representation of the given String.
      */
     public static byte[] transformStringToVarIntByteArray(String string) {
@@ -77,8 +74,7 @@ public class HiveJUtils {
     /**
      * Transform a long value into its byte representation.
      * 
-     * @param longValue
-     *            value The long value to transform.
+     * @param longValue value The long value to transform.
      * @return The byte representation of the given value.
      */
     public static byte[] transformLongToVarIntByteArray(long longValue) {
@@ -101,19 +97,5 @@ public class HiveJUtils {
                     + "Using BitcoinJ as Fallback. This could cause problems for values > 127.", e);
             return (new VarInt(longValue)).encode();
         }
-    }
-    
-    /**
-     * 
-     * @param collectionToSet
-     * @param message
-     * @return
-     */
-    public static <T> List<T> setIfNotNullAndNotEmpty(List<T> collectionToSet, String message) {
-        if (collectionToSet == null || collectionToSet.isEmpty()) {
-            throw new InvalidParameterException(message);
-        }
-
-        return collectionToSet;
     }
 }

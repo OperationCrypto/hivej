@@ -16,57 +16,55 @@
  */
 package org.operationcrypto.hivej.jrpc;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.operationcrypto.hivej.communication.CommunicationHandler;
-import org.operationcrypto.hivej.enums.RequestMethod;
-import org.operationcrypto.hivej.enums.HiveApiType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.operationcrypto.hivej.communication.CommunicationHandler;
+import org.operationcrypto.hivej.enums.HiveApiType;
+import org.operationcrypto.hivej.enums.RequestMethod;
+
 
 /**
  * A wrapper object that carries all required fields for a request.
  * 
- * @author 
+ * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
 @JsonPropertyOrder({ "jsonrpc", "method", "params", "id" })
 public class JsonRPCRequest {
     /** A shared <code>Random</code> instance. */
-    private static final Random randomGenerator = new Random();
+    private static final SecureRandom randomGenerator = new SecureRandom();
     /** The JSON RPC version. */
     private static final String JSONRPC = "2.0";
     /** The ID of this request. */
     private final long id = randomGenerator.nextLong();
-    private String method;
+    private final String method;
     /**
-     * The parameters of the request which should only be added in case there
-     * are parameters at all.
+     * The parameters of the request which should only be added in case there are
+     * parameters at all.
      */
     @JsonInclude(Include.NON_NULL)
-    private Object params;
+    private final Object params;
 
     /**
      * Instantiate a new RequestObject.
      * 
-     * @param hiveApiType
-     *            The {@link HiveApiType} the <code>requestMethod</code>
-     *            belongs to or <code>null</code> if the default namespace
-     *            should be used.
-     * @param requestMethod
-     *            The {@link RequestMethod} to request.
-     * @param params
-     *            An object which contains all parameters required by the
-     *            <code>requestMethod</code> or <code>null</code> if no
-     *            parameters are required.
+     * @param hiveApiType   The {@link HiveApiType} the <code>requestMethod</code>
+     *                      belongs to or <code>null</code> if the default namespace
+     *                      should be used.
+     * @param requestMethod The {@link RequestMethod} to request.
+     * @param params        An object which contains all parameters required by the
+     *                      <code>requestMethod</code> or <code>null</code> if no
+     *                      parameters are required.
      */
-    public JsonRPCRequest(@Nullable HiveApiType hiveApiType, RequestMethod requestMethod, @Nullable Object params) {
+    public JsonRPCRequest(@Nullable final HiveApiType hiveApiType, final RequestMethod requestMethod,
+            @Nullable final Object params) {
         String namespaceAndMethod = "";
         if (hiveApiType != null) {
             namespaceAndMethod = hiveApiType.name().toLowerCase() + ".";

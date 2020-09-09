@@ -33,11 +33,11 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 
 /**
- * This class handles the communication to a HiveJ Node using the HTTP protocol.
+ * This class handles the communication to a Hive Node using the HTTP protocol.
  * 
- * @author
+ * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
-public class HttpClient extends AbstractClient {
+public class HttpClient implements AbstractClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpClient.class);
 
     @Override
