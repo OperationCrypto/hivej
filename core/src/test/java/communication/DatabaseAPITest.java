@@ -47,7 +47,7 @@ import org.operationcrypto.hivej.jrpc.JsonRPCRequest;
 
 public class DatabaseAPITest {
 	@BeforeClass
-	public void initTests() {
+	public static void initTests() {
 		// FIXME: Need to initiate the config once to make sure an endpoint is added.
 		HiveJConfig.getInstance();
 	}

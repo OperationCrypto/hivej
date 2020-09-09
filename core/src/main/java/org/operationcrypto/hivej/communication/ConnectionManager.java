@@ -119,7 +119,7 @@ public class ConnectionManager {
         }
         // Check if the nextClient counter is higher than the actual number of clients -
         // If it is, reset it.
-        if (nextClient > clients.size()) {
+        if (nextClient >= clients.size()) {
             nextClient = 0;
         }
 
