@@ -20,26 +20,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.security.InvalidParameterException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
-
-import javax.annotation.Nullable;
 
 import org.operationcrypto.hivej.config.HiveJConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import eu.bittrade.crypto.core.ECKey;
 import eu.bittrade.crypto.core.VarInt;
 
 /**

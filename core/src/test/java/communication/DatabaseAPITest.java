@@ -17,13 +17,25 @@
 package communication;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collections;
 
 import org.junit.Test;
+import org.operationcrypto.hivej.api.database.model.Account;
+import org.operationcrypto.hivej.api.database.model.FindAccountRecoveryRequestsArgs;
+import org.operationcrypto.hivej.api.database.model.FindAccountRecoveryRequestsReturn;
+import org.operationcrypto.hivej.api.database.model.FindAccountsArgs;
+import org.operationcrypto.hivej.api.database.model.FindAccountsReturn;
+import org.operationcrypto.hivej.api.database.model.FindOwnerHistoriesArgs;
+import org.operationcrypto.hivej.api.database.model.FindOwnerHistoriesReturn;
 import org.operationcrypto.hivej.api.database.model.FindVotesArgs;
 import org.operationcrypto.hivej.api.database.model.FindVotesReturn;
 import org.operationcrypto.hivej.api.database.model.Fund;
 import org.operationcrypto.hivej.api.database.model.GetRewardFundsReturn;
+import org.operationcrypto.hivej.api.database.model.GetVersionReturn;
 import org.operationcrypto.hivej.api.database.model.RewardBalance;
 import org.operationcrypto.hivej.api.database.model.Vote;
 import org.operationcrypto.hivej.communication.CommunicationHandler;
@@ -86,6 +98,108 @@ public class DatabaseAPITest {
 		assertNotNull(fund.getLastUpdate());
 		assertNotNull(fund.getContentConstant());
 		assertNotNull(fund.getCurationRewardCurve());
+	}
+	
+	/**
+	 * Tests the database api get version request and response.
+	 * 
+	 * @throws Throwable
+	 */
+	@Test
+	public void testGetVersion() throws Throwable {
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.GET_VERSION,
+				null);
+		
+		CommunicationHandler communicationHandler = new CommunicationHandler();
+		GetVersionReturn result = communicationHandler.performRequest(request, GetVersionReturn.class).get(0);
+
+		assertEquals("0.23.0", result.getBlockchainVersion());
+		assertNotNull(result.getChainId());
+		assertNotNull(result.getFcRevision());
+		assertNotNull(result.getSteemRevision());
+	}
+	
+	/**
+	 * Tests the database api find owner history request and response
+	 * 
+	 * @throws Throwable
+	 */	
+	@Test
+	public void testFindOwnerHistories() throws Throwable {
+		FindOwnerHistoriesArgs args = new FindOwnerHistoriesArgs();
+		args.setOwner("hiveio");
+		
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.FIND_OWNER_HISTORIES,
+				args);
+		
+		CommunicationHandler communicationHandler = new CommunicationHandler();
+		FindOwnerHistoriesReturn result = communicationHandler.performRequest(request, FindOwnerHistoriesReturn.class)
+				.get(0);
+		
+		assertNotNull(result.getOwnerAuths());
+	}
+	
+	/**
+	 * Tests the database api find account recovery requests request and response.
+	 * 
+	 * @throws Throwable
+	 */
+	@Test
+	public void testFindAccountRecoveryRequests() throws Throwable {
+		FindAccountRecoveryRequestsArgs args = new FindAccountRecoveryRequestsArgs();
+		args.setAccounts(Collections.singletonList("hiveio"));
+		
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.FIND_ACCOUNT_RECOVERY_REQUESTS,
+				args);
+		
+		CommunicationHandler communicationHandler = new CommunicationHandler();
+		FindAccountRecoveryRequestsReturn result = communicationHandler
+				.performRequest(request, FindAccountRecoveryRequestsReturn.class).get(0);
+		
+		assertNotNull(result);
+	}
+	
+	/**
+	 * Tests the database api find accounts request and response.
+	 * 
+	 * @throws Throwable
+	 */
+	@Test
+	public void testFindAccounts() throws Throwable {
+		String dezAccount = "dez1337";
+
+		FindAccountsArgs args = new FindAccountsArgs();
+		args.setAccounts(Collections.singletonList(dezAccount));
+
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.FIND_ACCOUNTS, args);
+
+		CommunicationHandler communicationHandler = new CommunicationHandler();
+		FindAccountsReturn result = communicationHandler.performRequest(request, FindAccountsReturn.class).get(0);
+
+		assertEquals(1, result.getAccounts().size());
+		Account account = result.getAccounts().get(0);
+
+		assertEquals(dezAccount, account.getName());
+		assertNotNull(account.getActive());
+		assertNotNull(account.getBalance());
+		assertNotNull(account.getCanVote());
+		assertTrue(account.getCommentCount() >= 0);
+		assertNotNull(account.getCreated());
+		assertTrue(account.getCurationRewards() >= 1);
+		assertNotNull(account.getDelegatedVestingShares());
+		assertNotNull(account.getDownvoteManabar());
+		assertNotNull(account.getId());
+		assertFalse(account.getIsSmt());
+		assertNotNull(account.getRewardSbdBalance());
+		assertNotNull(account.getRewardSteemBalance());
+		assertNotNull(account.getRewardVestingBalance());
+		assertNotNull(account.getRewardVestingSteem());
+		assertNotNull(account.getRecoveryAccount());
+		assertNotNull(account.getResetAccount());
+		assertNotNull(account.getReceivedVestingShares());
+		assertNotNull(account.getVotingManabar());
+		assertNotNull(account.getVestingWithdrawRate());
+		assertNotNull(account.getVestingShares());
 	}
 }
  
