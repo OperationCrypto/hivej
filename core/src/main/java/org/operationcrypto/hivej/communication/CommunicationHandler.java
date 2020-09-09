@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class handles the communication to the HiveJ web socket API.
+ * This class handles the communication to the Hive API.
  * 
  * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
@@ -45,7 +45,8 @@ public class CommunicationHandler {
 
     /**
      * Perform a request to the node api whose response will automatically get
-     * transformed into the given object.
+     * transformed into the given object. The method also takes care of restarting a
+     * request in case of a connection issue.
      * 
      * @param requestObject A request object that contains all needed parameters.
      * @param targetClass   The type, the response should be transformed to.
@@ -57,19 +58,22 @@ public class CommunicationHandler {
         try {
             JsonRPCResponse rawJsonResponse = ConnectionManager.getInstance().getClient()
                     .invokeAndReadResponse(requestObject);
+            LOGGER.debug("Received {} ", rawJsonResponse);
 
             if (rawJsonResponse.isError()) {
                 // TODO: Add appropriate Error Handling
                 // throw rawJsonResponse.handleError(requestObject.getId());
-                return null;
+                throw new Exception("The response contained an error.");
             } else {
                 // HANDLE NORMAL RESPONSE
                 JavaType expectedResultType = mapper.getTypeFactory().constructCollectionType(List.class, targetClass);
                 return rawJsonResponse.handleResult(expectedResultType, requestObject.getId());
             }
         } catch (Exception e) {
-            LOGGER.warn("The connection has been closed.", e);
-            throw e;
+            LOGGER.warn("The connection has been closed. Switching the endpoint and reconnecting.");
+            LOGGER.debug("For the following reason: ", e);
+            // Retry the request.
+            return performRequest(requestObject, targetClass);
         }
     }
 
