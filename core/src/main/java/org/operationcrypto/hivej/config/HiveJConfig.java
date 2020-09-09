@@ -16,12 +16,12 @@
  */
 package org.operationcrypto.hivej.config;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import org.operationcrypto.hivej.communication.ConnectionManager;
+import org.operationcrypto.hivej.communication.Endpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +35,6 @@ public class HiveJConfig {
 	private Charset encodingCharset;
 	/** Configure the maximum time the client should wait for an HTTP response. */
 	private int responseTimeout;
-	/**
-	 * Configure how long a connection should be kept active even if no actions are
-	 * performed.
-	 */
-	private int idleTimeout;
 	/**
 	 * Configure the maximum time the client should wait until a connection is
 	 * established.
@@ -68,7 +63,13 @@ public class HiveJConfig {
 
 		this.setResponseTimeout(1000);
 		this.setConnectionTimeout(2000);
-		this.setIdleTimeout(60000);
+
+		try {
+			this.addEndpoint(new URL(DEFAULT_HIVE_API_URI));
+		} catch (Exception e) {
+			LOGGER.error("Could not create a URL object from the default hive URL.", e);
+		}
+
 	}
 
 	/**
@@ -115,23 +116,12 @@ public class HiveJConfig {
 	}
 
 	/**
-	 * Override the default, maximum time that HiveJ will keep an unused connection
-	 * open.A value that is 0 or negative indicates the sessions will never timeout
-	 * due to inactivity.
-	 *
-	 * @param idleTimeout The time in milliseconds a connection should be left
-	 *                    intact even when no activities are performed.
-	 */
-	public void setIdleTimeout(int idleTimeout) {
-		this.idleTimeout = idleTimeout;
-	}
-
-	/**
 	 * Get the configured, maximum time that HiveJ will wait until a connection to
 	 * the node could be established. A value that is 0 or negative indicates to
 	 * wait forever.
 	 * 
-	 * @return The time in milliseconds HiveJ should wait until a connection has been established.
+	 * @return The time in milliseconds HiveJ should wait until a connection has
+	 *         been established.
 	 */
 	public int getConnectionTimeout() {
 		return connectionTimeout;
@@ -142,25 +132,46 @@ public class HiveJConfig {
 	 * the node could be established. A value that is 0 or negative indicates to
 	 * wait forever.
 	 *
-	 * @param connectionTimeout The time in milliseconds until a connection has to be established.
+	 * @param connectionTimeout The time in milliseconds until a connection has to
+	 *                          be established.
 	 */
 	public void setConnectionTimeout(int connectionTimeout) {
 		this.connectionTimeout = connectionTimeout;
 	}
 
 	/**
-	 * Get the configured, maximum time that HiveJ will keep an unused connection
-	 * open. A value that is 0 or negative indicates the sessions will never timeout
-	 * due to inactivity.
-	 * 
-	 * @return The time in milliseconds a connection should be left intact even when
-	 *         no activities are performed.
+	 * Get all currently configured endpoints known to HiveJ.
 	 */
-	public int getIdleTimeout() {
-		return idleTimeout;
+	public List<Endpoint> getEndpoints() {
+		return ConnectionManager.getInstance().getEndpoints();
 	}
 
-	public Pair<URI, Boolean> getNextEndpointURI(int selector) throws URISyntaxException {
-		return new ImmutablePair<>(new URI(DEFAULT_HIVE_API_URI), true);
+	/**
+	 * Add a new endpoint to HiveJ. HiveJ will load-balance requests between all
+	 * known endpoints.
+	 * 
+	 * @param endpointURL            The URL of the endpoint.
+	 * @param disableSSLVerification Define if the SSL verification should be
+	 *                               disabled or not (Default / 'null' keeps the SSL
+	 *                               verification active).
+	 * @throws Exception In case a new client could not be estabilished for the
+	 *                   given endpointURL.
+	 */
+	public void addEndpoint(URL endpointURL, Boolean disableSSLVerification) throws Exception {
+		// Initialize a new list if required.
+		ConnectionManager.getInstance().addClient(new Endpoint(endpointURL, disableSSLVerification));
+	}
+
+	/**
+	 * Add a new endpoint to HiveJ. HiveJ will load-balance requests between all
+	 * known endpoints (SSL verification is enabled).
+	 * 
+	 * @param endpointURL The URL of the endpoint.
+	 * @throws Exception In case a new client could not be estabilished for the
+	 *                   given endpointURL.
+	 */
+	public void addEndpoint(URL endpointURL) throws Exception {
+		// Initialize a new list if required.
+		ConnectionManager.getInstance().addClient(new Endpoint(endpointURL, false));
 	}
 }

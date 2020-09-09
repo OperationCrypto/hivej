@@ -16,24 +16,19 @@
  */
 package org.operationcrypto.hivej.communication;
 
-import java.io.IOException;
-import java.net.URI;
-import java.security.InvalidParameterException;
 import java.util.List;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.operationcrypto.hivej.config.HiveJConfig;
-import org.operationcrypto.hivej.jrpc.JsonRPCRequest;
-import org.operationcrypto.hivej.jrpc.JsonRPCResponse;
-import org.operationcrypto.hivej.base.serializer.BooleanSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import org.operationcrypto.hivej.base.serializer.BooleanSerializer;
+import org.operationcrypto.hivej.jrpc.JsonRPCRequest;
+import org.operationcrypto.hivej.jrpc.JsonRPCResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class handles the communication to the HiveJ web socket API.
@@ -47,65 +42,21 @@ public class CommunicationHandler {
      * A preconfigured mapper instance used for de-/serialization of Json objects.
      */
     private static ObjectMapper mapper = getObjectMapper();
-    /** A counter for failed connection tries. */
-    private int numberOfConnectionTries = 0;
-    /** The client used to send requests. */
-    private AbstractClient client;
 
     /**
-     * Initialize the Connection Handler.
-     * 
-     * @throws Exception If no connection to the HiveJ Node could be established.
-     */
-    public CommunicationHandler() throws Exception {
-        // Create a new connection
-        initializeNewClient();
-    }
-
-    /**
-     * Initialize a new <code>client</code> by selecting one of the configured
-     * endpoints.
-     * 
-     * @throws Exception If no {@link AbstractClient} implementation for the given
-     *                   schema is available.
-     */
-    public void initializeNewClient() throws Exception {
-        if (client != null) {
-            try {
-                client.closeConnection();
-            } catch (IOException e) {
-                throw new Exception("Could not close the current client connection.", e);
-            }
-        }
-        // Get a new endpoint URI based on the number of retries.
-        Pair<URI, Boolean> endpoint = HiveJConfig.getInstance().getNextEndpointURI(0);
-
-        if (endpoint.getLeft().getScheme().toLowerCase().matches("(http){1}[s]?")) {
-            client = new HttpClient();
-        } else if (endpoint.getLeft().getScheme().toLowerCase().matches("(ws){1}[s]?")) {
-            // client = new WebsocketClient();
-        } else {
-            throw new InvalidParameterException("No client implementation for the following protocol available: "
-                    + endpoint.getLeft().getScheme().toLowerCase());
-        }
-    }
-
-    /**
-     * Perform a request to the web socket API whose response will automatically get
+     * Perform a request to the node api whose response will automatically get
      * transformed into the given object.
      * 
      * @param requestObject A request object that contains all needed parameters.
-     * @param targetClass   The type the response should be transformed to.
-     * @param <T>           The type that should be returned.
+     * @param targetClass   The type, the response should be transformed to.
+     * @param <T>           The type, that should be returned.
      * @return The server response transformed into a list of given objects.
      * @throws Exception If the Server returned an error object.
      */
     public <T> List<T> performRequest(JsonRPCRequest requestObject, Class<T> targetClass) throws Exception {
         try {
-            Pair<URI, Boolean> endpoint = HiveJConfig.getInstance().getNextEndpointURI(numberOfConnectionTries++);
-            JsonRPCResponse rawJsonResponse = client.invokeAndReadResponse(requestObject, endpoint.getLeft(),
-                    endpoint.getRight());
-            LOGGER.debug("Received {} ", rawJsonResponse);
+            JsonRPCResponse rawJsonResponse = ConnectionManager.getInstance().getClient()
+                    .invokeAndReadResponse(requestObject);
 
             if (rawJsonResponse.isError()) {
                 // TODO: Add appropriate Error Handling
@@ -117,10 +68,8 @@ public class CommunicationHandler {
                 return rawJsonResponse.handleResult(expectedResultType, requestObject.getId());
             }
         } catch (Exception e) {
-            LOGGER.warn("The connection has been closed. Switching the endpoint and reconnecting.");
-            LOGGER.debug("For the following reason: ", e);
-            // return performRequest(requestObject, targetClass);
-            return null;
+            LOGGER.warn("The connection has been closed.", e);
+            throw e;
         }
     }
 
