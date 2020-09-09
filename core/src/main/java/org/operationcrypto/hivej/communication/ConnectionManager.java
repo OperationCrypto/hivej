@@ -109,18 +109,22 @@ public class ConnectionManager {
      * Get one of the clients managed by the <code>ConnectionManager</code>. The
      * <code>ConnectionManager</code> uses the Round-Robin load balancing mechanism.
      * 
-     * @return
+     * @return The next available client.
+     * @throws Exception In case no client is available.
      */
-    public AbstractClient getClient() {
-        // Get the next client and raise the counter afterwards.
-        AbstractClient selectedClient = clients.get(nextClient++);
+    public AbstractClient getClient() throws Exception {
+        // Check if an endpoint is available.
+        if (clients == null || clients.isEmpty()) {
+            throw new Exception("No clients available.");
+        }
         // Check if the nextClient counter is higher than the actual number of clients -
         // If it is, reset it.
-        if (nextClient >= clients.size()) {
+        if (nextClient > clients.size()) {
             nextClient = 0;
         }
 
-        return selectedClient;
+        // Get the next client and raise the counter afterwards.
+        return clients.get(nextClient++);
     }
 
     /**

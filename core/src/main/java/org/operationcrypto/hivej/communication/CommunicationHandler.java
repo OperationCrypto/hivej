@@ -16,6 +16,7 @@
  */
 package org.operationcrypto.hivej.communication;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.core.Version;
@@ -69,11 +70,14 @@ public class CommunicationHandler {
                 JavaType expectedResultType = mapper.getTypeFactory().constructCollectionType(List.class, targetClass);
                 return rawJsonResponse.handleResult(expectedResultType, requestObject.getId());
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOGGER.warn("The connection has been closed. Switching the endpoint and reconnecting.");
             LOGGER.debug("For the following reason: ", e);
             // Retry the request.
             return performRequest(requestObject, targetClass);
+        } catch (Exception e) {
+            LOGGER.debug("Unable to send request for an unknown reason.", e);
+            throw e;
         }
     }
 

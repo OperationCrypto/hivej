@@ -87,7 +87,7 @@ public class HttpClient extends AbstractClient {
     }
 
     @Override
-    public JsonRPCResponse invokeAndReadResponse(JsonRPCRequest requestObject) throws Exception {
+    public JsonRPCResponse invokeAndReadResponse(JsonRPCRequest requestObject) throws IOException {
         try {
             String requestPayload = requestObject.toJson();
             HttpRequest httpRequest = requestFactory.buildPostRequest(
@@ -115,7 +115,7 @@ public class HttpClient extends AbstractClient {
             }
 
         } catch (IOException e) {
-            throw new Exception("A problem occured while processing the request.", e);
+            throw new IOException("A problem occured while processing the request.", e);
         }
     }
 
