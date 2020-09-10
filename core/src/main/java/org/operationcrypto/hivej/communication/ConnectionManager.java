@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 public class ConnectionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManager.class);
 
-    // The singleton.
-    private static ConnectionManager sConnectionManager;
+    /** The one and only instance. */
+    private static volatile ConnectionManager sConnectionManager;
 
     /** A pointer to the next client to use. */
     private int nextClient;
@@ -45,6 +45,12 @@ public class ConnectionManager {
      * Create a new <code>ConnectionManager</code>.
      */
     private ConnectionManager() {
+        // Make sure the internal instance can only be initialized once, even if
+        // reflection is used.
+        if (sConnectionManager != null) {
+            throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
+        }
+
         this.nextClient = 0;
         this.clients = new CopyOnWriteArrayList<>();
     }
@@ -54,9 +60,14 @@ public class ConnectionManager {
      * 
      * @return HiveJConfig
      */
-    public static ConnectionManager getInstance() {
+    public static synchronized ConnectionManager getInstance() {
+        // Double-checked locking pattern
         if (sConnectionManager == null) {
-            sConnectionManager = new ConnectionManager();
+            synchronized (ConnectionManager.class) {
+                if (sConnectionManager == null)
+                    sConnectionManager = new ConnectionManager();
+            }
+
         }
         return sConnectionManager;
     }
