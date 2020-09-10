@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.operationcrypto.hivej.api.database.model.Account;
 import org.operationcrypto.hivej.api.database.model.FindAccountRecoveryRequestsArgs;
@@ -39,13 +40,21 @@ import org.operationcrypto.hivej.api.database.model.GetVersionReturn;
 import org.operationcrypto.hivej.api.database.model.RewardBalance;
 import org.operationcrypto.hivej.api.database.model.Vote;
 import org.operationcrypto.hivej.communication.CommunicationHandler;
+import org.operationcrypto.hivej.config.HiveJConfig;
 import org.operationcrypto.hivej.enums.HiveApiType;
 import org.operationcrypto.hivej.enums.RequestMethod;
 import org.operationcrypto.hivej.jrpc.JsonRPCRequest;
 
 public class DatabaseAPITest {
+	@BeforeClass
+	public static void initTests() {
+		// FIXME: Need to initiate the config once to make sure an endpoint is added.
+		HiveJConfig.getInstance();
+	}
+
 	/**
-	 * Tests the database api find votes request and response by passing a user and permlink.
+	 * Tests the database api find votes request and response by passing a user and
+	 * permlink.
 	 * 
 	 * @throws Throwable
 	 */
@@ -54,12 +63,12 @@ public class DatabaseAPITest {
 		String permlink = "steemj-dev-diary-9-14-01-2018";
 		String author = "dez1337";
 		FindVotesArgs args = new FindVotesArgs(author, permlink);
-		
+
 		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.FIND_VOTES, args);
 
 		CommunicationHandler communicationHandler = new CommunicationHandler();
 		FindVotesReturn result = communicationHandler.performRequest(request, FindVotesReturn.class).get(0);
-		
+
 		Vote vote = result.getVotes().get(0);
 		assertEquals(permlink, vote.getPermlink());
 		assertEquals(author, vote.getAuthor());
@@ -70,16 +79,15 @@ public class DatabaseAPITest {
 		assertEquals(0, vote.getNumChanges());
 		assertEquals("2018-01-14T15:50:09", vote.getLastUpdate());
 	}
-	
+
 	/**
 	 * Tests the database api get reward funds request (no parameters) and response.
 	 * 
 	 * @throws Throwable
-	 */	
+	 */
 	@Test
 	public void testGetRewardFunds() throws Throwable {
-		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.GET_REWARD_FUNDS,
-				null);
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.GET_REWARD_FUNDS, null);
 
 		CommunicationHandler communicationHandler = new CommunicationHandler();
 		GetRewardFundsReturn result = communicationHandler.performRequest(request, GetRewardFundsReturn.class).get(0);
@@ -99,7 +107,7 @@ public class DatabaseAPITest {
 		assertNotNull(fund.getContentConstant());
 		assertNotNull(fund.getCurationRewardCurve());
 	}
-	
+
 	/**
 	 * Tests the database api get version request and response.
 	 * 
@@ -107,9 +115,8 @@ public class DatabaseAPITest {
 	 */
 	@Test
 	public void testGetVersion() throws Throwable {
-		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.GET_VERSION,
-				null);
-		
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.GET_VERSION, null);
+
 		CommunicationHandler communicationHandler = new CommunicationHandler();
 		GetVersionReturn result = communicationHandler.performRequest(request, GetVersionReturn.class).get(0);
 
@@ -118,27 +125,26 @@ public class DatabaseAPITest {
 		assertNotNull(result.getFcRevision());
 		assertNotNull(result.getSteemRevision());
 	}
-	
+
 	/**
 	 * Tests the database api find owner history request and response
 	 * 
 	 * @throws Throwable
-	 */	
+	 */
 	@Test
 	public void testFindOwnerHistories() throws Throwable {
 		FindOwnerHistoriesArgs args = new FindOwnerHistoriesArgs();
 		args.setOwner("hiveio");
-		
-		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.FIND_OWNER_HISTORIES,
-				args);
-		
+
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.FIND_OWNER_HISTORIES, args);
+
 		CommunicationHandler communicationHandler = new CommunicationHandler();
 		FindOwnerHistoriesReturn result = communicationHandler.performRequest(request, FindOwnerHistoriesReturn.class)
 				.get(0);
-		
+
 		assertNotNull(result.getOwnerAuths());
 	}
-	
+
 	/**
 	 * Tests the database api find account recovery requests request and response.
 	 * 
@@ -148,17 +154,17 @@ public class DatabaseAPITest {
 	public void testFindAccountRecoveryRequests() throws Throwable {
 		FindAccountRecoveryRequestsArgs args = new FindAccountRecoveryRequestsArgs();
 		args.setAccounts(Collections.singletonList("hiveio"));
-		
-		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.FIND_ACCOUNT_RECOVERY_REQUESTS,
-				args);
-		
+
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API,
+				RequestMethod.FIND_ACCOUNT_RECOVERY_REQUESTS, args);
+
 		CommunicationHandler communicationHandler = new CommunicationHandler();
 		FindAccountRecoveryRequestsReturn result = communicationHandler
 				.performRequest(request, FindAccountRecoveryRequestsReturn.class).get(0);
-		
+
 		assertNotNull(result);
 	}
-	
+
 	/**
 	 * Tests the database api find accounts request and response.
 	 * 
@@ -202,4 +208,3 @@ public class DatabaseAPITest {
 		assertNotNull(account.getVestingShares());
 	}
 }
- 

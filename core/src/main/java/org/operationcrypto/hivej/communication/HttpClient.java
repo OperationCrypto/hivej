@@ -17,8 +17,16 @@
 package org.operationcrypto.hivej.communication;
 
 import java.io.IOException;
-import java.net.URI;
+import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.util.UUID;
+
+import com.google.api.client.http.ByteArrayContent;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.javanet.NetHttpTransport;
 
 import org.apache.http.client.ClientProtocolException;
 import org.operationcrypto.hivej.jrpc.JsonRPCRequest;
@@ -26,50 +34,88 @@ import org.operationcrypto.hivej.jrpc.JsonRPCResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.api.client.http.ByteArrayContent;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.javanet.NetHttpTransport;
-
 /**
  * This class handles the communication to a Hive Node using the HTTP protocol.
  * 
  * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
-public class HttpClient implements AbstractClient {
+public class HttpClient extends AbstractClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpClient.class);
+    private final String CLIENT_ID;
+
+    /**
+     * This field stores the connection factory used for requests against the given
+     * endpoint.
+     */
+    private HttpRequestFactory requestFactory;
+
+    /**
+     * Initialize a new Http Client.
+     * 
+     * @param endpointURL            The endpoint to connect to.
+     * @param disableSSLVerification Configure if the SSL certificate validation
+     *                               should be skipped.
+     * @throws Exception In case the request factory could not be setup.
+     */
+    public HttpClient(URL endpointURL, boolean disableSSLVerification) throws Exception {
+        this(new Endpoint(endpointURL, disableSSLVerification));
+    }
+
+    /**
+     * Initialize a new Http Client.
+     * 
+     * @param endpoint The <code>Endpoint</code> this client connects to.
+     * @throws Exception In case the request factory could not be setup.
+     */
+    public HttpClient(Endpoint endpoint) throws Exception {
+        this.setEndpoint(endpoint);
+
+        // Generate a unique client id for easier logging.
+        CLIENT_ID = this.getEndpoint().getEndpointURL() + "-" + UUID.randomUUID();
+
+        NetHttpTransport.Builder builder = new NetHttpTransport.Builder();
+        requestFactory = builder.build().createRequestFactory(new HttpClientRequestInitializer());
+        // Disable SSL verification if needed
+        if (this.getEndpoint().getDisableSSLVerification()
+                && this.getEndpoint().getEndpointURL().getProtocol().equals("https")) {
+            try {
+                builder.doNotValidateCertificate();
+            } catch (GeneralSecurityException e) {
+                throw new Exception("Could not initialize request builder.", e);
+            }
+        }
+    }
 
     @Override
-    public JsonRPCResponse invokeAndReadResponse(JsonRPCRequest requestObject, URI endpointUri,
-            boolean sslVerificationDisabled) throws Exception {
+    public JsonRPCResponse invokeAndReadResponse(JsonRPCRequest requestObject) throws IOException {
         try {
-            NetHttpTransport.Builder builder = new NetHttpTransport.Builder();
-            // Disable SSL verification if needed
-            if (sslVerificationDisabled && endpointUri.getScheme().equals("https")) {
-                builder.doNotValidateCertificate();
-            }
-
             String requestPayload = requestObject.toJson();
-            HttpRequest httpRequest = builder.build().createRequestFactory(new HttpClientRequestInitializer())
-                    .buildPostRequest(new GenericUrl(endpointUri),
-                            ByteArrayContent.fromString("application/json", requestPayload));
+            HttpRequest httpRequest = requestFactory.buildPostRequest(
+                    new GenericUrl(this.getEndpoint().getEndpointURL()),
+                    ByteArrayContent.fromString("application/json", requestPayload));
 
-            LOGGER.debug("Sending {}.", requestPayload);
+            LOGGER.debug("Client {} send {}.", CLIENT_ID, requestPayload);
 
             HttpResponse httpResponse = httpRequest.execute();
+            try {
+                int status = httpResponse.getStatusCode();
+                String responsePayload = httpResponse.parseAsString();
 
-            int status = httpResponse.getStatusCode();
-            String responsePayload = httpResponse.parseAsString();
-
-            if (status >= 200 && status < 300 && responsePayload != null) {
-                return new JsonRPCResponse(CommunicationHandler.getObjectMapper().readTree(responsePayload));
-            } else {
-                throw new ClientProtocolException("Unexpected response status: " + status);
+                if (status >= 200 && status < 300 && responsePayload != null) {
+                    JsonRPCResponse rawJsonResponse = new JsonRPCResponse(
+                            CommunicationHandler.getObjectMapper().readTree(responsePayload));
+                    LOGGER.debug("Client {} received {} ", CLIENT_ID, rawJsonResponse);
+                    return rawJsonResponse;
+                } else {
+                    throw new ClientProtocolException("Unexpected response status: " + status);
+                }
+            } finally {
+                // Close the response if no longer needed.
+                httpResponse.disconnect();
             }
 
-        } catch (GeneralSecurityException | IOException e) {
-            throw new Exception("A problem occured while processing the request.", e);
+        } catch (IOException e) {
+            throw new IOException("A problem occured while processing the request.", e);
         }
     }
 

@@ -17,7 +17,6 @@
 package org.operationcrypto.hivej.communication;
 
 import java.io.IOException;
-import java.net.URI;
 
 import org.operationcrypto.hivej.jrpc.JsonRPCRequest;
 import org.operationcrypto.hivej.jrpc.JsonRPCResponse;
@@ -27,21 +26,22 @@ import org.operationcrypto.hivej.jrpc.JsonRPCResponse;
  * 
  * @author <a href="https://github.com/marvin-we">marvin-we</a>
  */
-public interface AbstractClient {
+public abstract class AbstractClient {
+    /**
+     * The endpoint this client communicates to.
+     */
+    private Endpoint endpoint;
+
     /**
      * Use this method to send a <code>requestObject</code> to the
-     * <code>endpointUri</code> and to receive an answer.
+     * <code>endpointUrl</code> and to receive an answer.
      * 
-     * @param requestObject           The object to send.
-     * @param endpointUri             The endpoint to connect and send to.
-     * @param sslVerificationDisabled Define if the SSL verification should be
-     *                                disabled.
+     * @param requestObject The object to send.
      * @return The response returned by the HiveJ Node wrapped in a
      *         {@link JsonRPCResponse} object.
      * @throws Exception In case of communication problems.
      */
-    public abstract JsonRPCResponse invokeAndReadResponse(JsonRPCRequest requestObject, URI endpointUri,
-            boolean sslVerificationDisabled) throws Exception;
+    public abstract JsonRPCResponse invokeAndReadResponse(JsonRPCRequest requestObject) throws Exception;
 
     /**
      * Use this method to close the connection of this client.
@@ -49,4 +49,22 @@ public interface AbstractClient {
      * @throws IOException If the connection can't be closed.
      */
     public abstract void closeConnection() throws IOException;
+
+    /**
+     * Get the endpoint used by this client.
+     * 
+     * @return The endpoint this client communicates to.
+     */
+    public Endpoint getEndpoint() {
+        return endpoint;
+    }
+
+    /**
+     * Define the endpoint used by this client.
+     * 
+     * @param endpoint The endpoint this client communicates to.
+     */
+    public void setEndpoint(Endpoint endpoint) {
+        this.endpoint = endpoint;
+    }
 }
