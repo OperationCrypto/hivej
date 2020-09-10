@@ -28,9 +28,6 @@ import org.slf4j.LoggerFactory;
 public class HiveJConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HiveJConfig.class);
 
-	/** The default endpoint URI */
-	private static final String DEFAULT_HIVE_API_URI = "https://api.hive.blog/";
-
 	/** The one and only instance. */
 	private static volatile HiveJConfig sHiveJConfig;
 
@@ -56,13 +53,6 @@ public class HiveJConfig {
 
 		this.setResponseTimeout(1000);
 		this.setConnectionTimeout(2000);
-
-		try {
-			this.addEndpoint(new URL(DEFAULT_HIVE_API_URI));
-		} catch (Exception e) {
-			LOGGER.error("Could not create a URL object from the default hive URL.", e);
-		}
-
 	}
 
 	/**
