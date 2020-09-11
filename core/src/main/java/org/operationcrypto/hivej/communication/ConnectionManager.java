@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ConnectionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManager.class);
+    /** Pattern to identify the HTTP protocol */
+    private static final String HTTP_PROTOCOL_PATTERN = "(http){1}[s]?"
 
     /** The one and only instance. */
     private static volatile ConnectionManager sConnectionManager;
@@ -79,7 +81,7 @@ public class ConnectionManager {
      * @throws Exception In case the client could not be initialized.
      */
     public void addClient(Endpoint endpoint) throws Exception {
-        if (endpoint.getEndpointURL().getProtocol().toLowerCase().matches("(http){1}[s]?")) {
+        if (endpoint.getEndpointURL().getProtocol().toLowerCase().matches(HTTP_PROTOCOL_PATTERN)) {
             this.clients.add(new HttpClient(endpoint));
         } else {
             throw new InvalidParameterException("No client implementation for the following protocol available: "
