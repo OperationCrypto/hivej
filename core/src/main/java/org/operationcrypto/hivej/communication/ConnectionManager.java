@@ -32,9 +32,11 @@ import org.slf4j.LoggerFactory;
  */
 public class ConnectionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManager.class);
+    /** Pattern to identify the HTTP protocol */
+    private static final String HTTP_PROTOCOL_PATTERN = "(http){1}[s]?";
 
-    // The singleton.
-    private static ConnectionManager sConnectionManager;
+    /** The one and only instance. */
+    private static volatile ConnectionManager sConnectionManager;
 
     /** A pointer to the next client to use. */
     private int nextClient;
@@ -45,6 +47,12 @@ public class ConnectionManager {
      * Create a new <code>ConnectionManager</code>.
      */
     private ConnectionManager() {
+        // Make sure the internal instance can only be initialized once, even if
+        // reflection is used.
+        if (sConnectionManager != null) {
+            throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
+        }
+
         this.nextClient = 0;
         this.clients = new CopyOnWriteArrayList<>();
     }
@@ -54,9 +62,14 @@ public class ConnectionManager {
      * 
      * @return HiveJConfig
      */
-    public static ConnectionManager getInstance() {
+    public static synchronized ConnectionManager getInstance() {
+        // Double-checked locking pattern
         if (sConnectionManager == null) {
-            sConnectionManager = new ConnectionManager();
+            synchronized (ConnectionManager.class) {
+                if (sConnectionManager == null)
+                    sConnectionManager = new ConnectionManager();
+            }
+
         }
         return sConnectionManager;
     }
@@ -68,7 +81,7 @@ public class ConnectionManager {
      * @throws Exception In case the client could not be initialized.
      */
     public void addClient(Endpoint endpoint) throws Exception {
-        if (endpoint.getEndpointURL().getProtocol().toLowerCase().matches("(http){1}[s]?")) {
+        if (endpoint.getEndpointURL().getProtocol().toLowerCase().matches(HTTP_PROTOCOL_PATTERN)) {
             this.clients.add(new HttpClient(endpoint));
         } else {
             throw new InvalidParameterException("No client implementation for the following protocol available: "

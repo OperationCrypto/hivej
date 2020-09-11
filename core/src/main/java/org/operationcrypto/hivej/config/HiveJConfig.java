@@ -31,6 +31,9 @@ public class HiveJConfig {
 	/** The default endpoint URI */
 	private static final String DEFAULT_HIVE_API_URI = "https://api.hive.blog/";
 
+	/** The one and only instance. */
+	private static volatile HiveJConfig sHiveJConfig;
+
 	/** Configure the encoding for e.g. comments. */
 	private Charset encodingCharset;
 	/** Configure the maximum time the client should wait for an HTTP response. */
@@ -41,25 +44,15 @@ public class HiveJConfig {
 	 */
 	private int connectionTimeout;
 
-	private static HiveJConfig sHiveJConfig;
-
-	/**
-	 * Returns the singleton instance HiveJConfigurationObject
-	 * 
-	 * @return HiveJConfig
-	 */
-	public static HiveJConfig getInstance() {
-		if (sHiveJConfig == null) {
-			sHiveJConfig = new HiveJConfig();
-		}
-		return sHiveJConfig;
-	}
-
 	/**
 	 * Create a new <code>HiveJConfig</code> prefilled with default values.
 	 */
 	private HiveJConfig() {
-		super();
+		// Make sure the internal instance can only be initialized once, even if
+		// reflection is used.
+		if (sHiveJConfig != null) {
+			throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
+		}
 
 		this.setResponseTimeout(1000);
 		this.setConnectionTimeout(2000);
@@ -70,6 +63,22 @@ public class HiveJConfig {
 			LOGGER.error("Could not create a URL object from the default hive URL.", e);
 		}
 
+	}
+
+	/**
+	 * Returns the singleton instance HiveJConfigurationObject
+	 * 
+	 * @return HiveJConfig
+	 */
+	public static synchronized HiveJConfig getInstance() {
+		// Double-checked locking pattern
+		if (sHiveJConfig == null) {
+			synchronized (HiveJConfig.class) {
+				if (sHiveJConfig == null)
+					sHiveJConfig = new HiveJConfig();
+			}
+		}
+		return sHiveJConfig;
 	}
 
 	/**
