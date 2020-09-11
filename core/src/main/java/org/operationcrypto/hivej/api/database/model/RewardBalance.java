@@ -16,47 +16,20 @@
  */
 package org.operationcrypto.hivej.api.database.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * This class implements the Hive "?" object.
  * 
  * @author <a href="https://github.com/Jodo1985">jodo1985</a>  
  */
-public class RewardBalance {
-	@JsonProperty("amount")
-	private String mAmount;
-	@JsonProperty("precision")
-	private int mPrecision;
-	@JsonProperty("nai")
-	private String mNai;
-	
-	public RewardBalance() {
-		// Default Constructor 
-	}
-
-	public String getAmount() {
-		return mAmount;
-	}
-
-	public void setAmount(String amount) {
-		this.mAmount = amount;
-	}
-
-	public int getPrecision() {
-		return mPrecision;
-	}
-
-	public void setPrecision(int precision) {
-		this.mPrecision = precision;
-	}
-
-	public String getNai() {
-		return mNai;
-	}
-
-	public void setNai(String nai) {
-		this.mNai = nai;
-	}
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "amount",
+    "precision",
+    "nai"
+})
+public class RewardBalance extends Money {
     
 }
