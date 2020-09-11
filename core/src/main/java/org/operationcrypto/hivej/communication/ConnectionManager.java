@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class ConnectionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManager.class);
     /** Pattern to identify the HTTP protocol */
-    private static final String HTTP_PROTOCOL_PATTERN = "(http){1}[s]?"
+    private static final String HTTP_PROTOCOL_PATTERN = "(http){1}[s]?";
 
     /** The one and only instance. */
     private static volatile ConnectionManager sConnectionManager;
