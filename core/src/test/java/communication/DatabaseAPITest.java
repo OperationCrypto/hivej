@@ -46,12 +46,6 @@ import org.operationcrypto.hivej.enums.RequestMethod;
 import org.operationcrypto.hivej.jrpc.JsonRPCRequest;
 
 public class DatabaseAPITest {
-	@BeforeClass
-	public static void initTests() {
-		// FIXME: Need to initiate the config once to make sure an endpoint is added.
-		HiveJConfig.getInstance();
-	}
-
 	/**
 	 * Tests the database api find votes request and response by passing a user and
 	 * permlink.

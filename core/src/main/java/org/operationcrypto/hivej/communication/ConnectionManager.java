@@ -17,6 +17,7 @@
 package org.operationcrypto.hivej.communication;
 
 import java.io.IOException;
+import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +33,11 @@ import org.slf4j.LoggerFactory;
  */
 public class ConnectionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManager.class);
+    /** The default endpoint URI */
+    private static final String DEFAULT_HIVE_API_URI = "https://api.hive.blog/";
 
-    // The singleton.
-    private static ConnectionManager sConnectionManager;
+    /** The one and only instance. */
+    private static volatile ConnectionManager sConnectionManager;
 
     /** A pointer to the next client to use. */
     private int nextClient;
@@ -45,8 +48,22 @@ public class ConnectionManager {
      * Create a new <code>ConnectionManager</code>.
      */
     private ConnectionManager() {
+        // Make sure the internal instance can only be initialized once, even if
+        // reflection is used.
+        if (sConnectionManager != null) {
+            throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
+        }
+
         this.nextClient = 0;
         this.clients = new CopyOnWriteArrayList<>();
+
+        try {
+            // Add the default endpoint so that the 'ConnectionManager ' is initialized with
+            // one valid connection.
+            this.addClient(new Endpoint(new URL(DEFAULT_HIVE_API_URI), false));
+        } catch (Exception e) {
+            LOGGER.error("Could not create a URL object from the default hive URL.", e);
+        }
     }
 
     /**
@@ -54,9 +71,14 @@ public class ConnectionManager {
      * 
      * @return HiveJConfig
      */
-    public static ConnectionManager getInstance() {
+    public static synchronized ConnectionManager getInstance() {
+        // Double-checked locking pattern
         if (sConnectionManager == null) {
-            sConnectionManager = new ConnectionManager();
+            synchronized (ConnectionManager.class) {
+                if (sConnectionManager == null)
+                    sConnectionManager = new ConnectionManager();
+            }
+
         }
         return sConnectionManager;
     }
