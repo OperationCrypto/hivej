@@ -21,11 +21,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.operationcrypto.hivej.api.database.model.Account;
+import org.operationcrypto.hivej.api.database.model.Comment;
 import org.operationcrypto.hivej.api.database.model.FindAccountRecoveryRequestsArgs;
 import org.operationcrypto.hivej.api.database.model.FindAccountRecoveryRequestsReturn;
 import org.operationcrypto.hivej.api.database.model.FindAccountsArgs;
@@ -37,13 +39,17 @@ import org.operationcrypto.hivej.api.database.model.FindVotesReturn;
 import org.operationcrypto.hivej.api.database.model.Fund;
 import org.operationcrypto.hivej.api.database.model.GetRewardFundsReturn;
 import org.operationcrypto.hivej.api.database.model.GetVersionReturn;
+import org.operationcrypto.hivej.api.database.model.ListCommentsArgs;
+import org.operationcrypto.hivej.api.database.model.ListCommentsReturn;
 import org.operationcrypto.hivej.api.database.model.RewardBalance;
 import org.operationcrypto.hivej.api.database.model.Vote;
 import org.operationcrypto.hivej.communication.CommunicationHandler;
 import org.operationcrypto.hivej.config.HiveJConfig;
 import org.operationcrypto.hivej.enums.HiveApiType;
+import org.operationcrypto.hivej.enums.Order;
 import org.operationcrypto.hivej.enums.RequestMethod;
 import org.operationcrypto.hivej.jrpc.JsonRPCRequest;
+import org.operationcrypto.hivej.util.StringUtil;
 
 public class DatabaseAPITest {
 	@BeforeClass
@@ -206,5 +212,43 @@ public class DatabaseAPITest {
 		assertNotNull(account.getVotingManabar());
 		assertNotNull(account.getVestingWithdrawRate());
 		assertNotNull(account.getVestingShares());
+	}
+	
+	/**
+	 * Tests the database api find accounts request and response.
+	 * 
+	 * Order can be one of: 
+	 * <li> by_cashout_time
+	 * <li> by_permlink
+	 * <li> by_root
+	 * <li> by_parent
+	 * 
+	 * @throws Throwable
+	 */
+	@Test
+	public void testListComments() throws Throwable { 
+		ListCommentsArgs args = new ListCommentsArgs();
+		args.setStart(Arrays.asList("wesp05","qgi0ex","",""));
+		args.setLimit(1);
+		args.setOrder(Order.BY_ROOT.toString());
+		
+		JsonRPCRequest request = new JsonRPCRequest(HiveApiType.DATABASE_API, RequestMethod.LIST_COMMENTS, args);
+
+		CommunicationHandler communicationHandler = new CommunicationHandler();
+		ListCommentsReturn result = communicationHandler.performRequest(request, ListCommentsReturn.class).get(0);
+		
+		assertEquals(1, result.getComments().size());
+		Comment comment = result.getComments().get(0);
+		assertEquals("luisfe", comment.getAuthor());
+		assertEquals(Integer.valueOf(88049364), comment.getId());
+		assertEquals(Boolean.TRUE, comment.getAllowReplies());
+		assertEquals(Boolean.TRUE, comment.getAllowVotes());
+		assertEquals("luisfe", comment.getRootAuthor());
+		assertEquals("estantes-de-muerte-y-libros-de-vida-shelves-of-death-and-books-of-life", comment.getRootPermlink());
+		assertEquals(StringUtil.EMPTY_STRING, comment.getParentAuthor());
+		assertEquals("hive-161155", comment.getParentPermlink());
+		assertEquals("hive-161155", comment.getCategory());
+		assertEquals("2020-09-11T17:35:30", comment.getActive());
+		assertEquals("2020-09-11T14:32:30",comment.getCreated());
 	}
 }
