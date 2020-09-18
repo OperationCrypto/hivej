@@ -4,7 +4,7 @@ public class StringUtil {
 	
 	private StringUtil() {
 		// Hide default constructor.
-	};
+	}
 	
 	/**
 	 * Constant Empty String. Use this for readability.
