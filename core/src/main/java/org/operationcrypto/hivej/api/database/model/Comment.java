@@ -212,7 +212,7 @@ public class Comment {
 
 	@JsonProperty("last_payout")
 	public void setLastPayout(String lastPayout) {
-		this.lastPayout = lastPayout;
+		this.lastPayout = lastPayout; 
 	}
 
 	@JsonProperty("depth")
